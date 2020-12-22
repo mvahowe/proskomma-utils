@@ -22,5 +22,4 @@ const tokenCategory = {
     unknown: "notWordLike"
 };
 
-
 module.exports = { tokenEnum, tokenEnumLabels, tokenCategory };
