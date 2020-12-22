@@ -15,6 +15,15 @@
     },
     "metadata": {
       "type": "object",
+      "properties": {
+        "selectors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["selectors"],
       "additionalProperties": false
     },
     "enums": {
