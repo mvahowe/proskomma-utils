@@ -1,4 +1,4 @@
-const xre from require('xregexp');
+const xre = require('xregexp');
 
 const validateTags = tags => {
   for (const tag of tags) {
