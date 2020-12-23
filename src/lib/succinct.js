@@ -45,9 +45,9 @@ const succinctGraftSeqId = (enums, enumIndexes, succinct, pos) => {
 const enumIndexes = (enums) => {
     const ret = {};
     for (const [category, succinct] of Object.entries(enums)) {
-        ret.category = enumIndex(category, succinct);
+        ret[category] = enumIndex(category, succinct);
     }
-    return enumIndexes;
+    return ret;
 }
 
 const enumIndex = (category, enumSuccinct) => {
