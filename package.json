@@ -1,6 +1,6 @@
 {
   "name": "proskomma-utils",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Schema and Other Utilities for Proskomma",
   "main": "dist/index.js",
   "scripts": {

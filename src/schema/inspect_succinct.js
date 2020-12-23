@@ -16,12 +16,6 @@ const inspectEnum = enumString => {
     return ret.join("\n");
 }
 
-const headerBytes = (succinct, pos) =>{
-    const headerByte = succinct.byte(pos);
-    const itemType = headerByte >> 6;
-    const itemLength = headerByte & 0x0000003F;
-    const itemSubtype = succinct.byte(pos + 1);
-    return [itemLength, itemType, itemSubtype];
-}
 
-module.exports = { inspectEnum, headerBytes };
+
+module.exports = { inspectEnum };
