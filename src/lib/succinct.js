@@ -63,14 +63,19 @@ const enumIndex = (category, enumSuccinct) => {
     return indexSuccinct;
 }
 
-const unpackEnum = (succinct) => {
+const unpackEnum = (succinct, includeIndex) => {
+    if (!includeIndex) {
+        includeIndex = false;
+    }
     let pos = 0;
+    let count = 0;
     const ret = [];
     while (pos < succinct.length) {
         const stringLength = succinct.byte(pos);
         const unpacked = succinct.countedString(pos);
-        ret.push(unpacked);
+        ret.push(includeIndex ? [count, unpacked] : unpacked);
         pos += stringLength + 1;
+        count++;
     }
     return ret;
 }
