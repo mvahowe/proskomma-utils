@@ -38,7 +38,7 @@ const succinctGraftName = (enums, enumIndexes, itemSubtype) => {
 }
 
 const succinctGraftSeqId = (enums, enumIndexes, succinct, pos) => {
-    const seqIndex = this.enumIndexes.ids[succinct.nByte(pos + 2)];
+    const seqIndex = enumIndexes.ids[succinct.nByte(pos + 2)];
     return enums.ids.countedString(seqIndex);
 }
 
