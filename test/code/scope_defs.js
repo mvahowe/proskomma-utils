@@ -1,7 +1,7 @@
 const test = require('tape');
 const { scopeEnum, scopeEnumLabels, labelForScope, nComponentsForScope } = require("../../src/lib/scope_defs");
 
-const testGroup = "Scope Def Edge Cases";
+const testGroup = "Scope Def";
 
 test(
     `scopeEnum (${testGroup})`,
@@ -31,7 +31,7 @@ test(
     `labelForScope (${testGroup})`,
     async function (t) {
         try {
-            t.plan(18);
+            t.plan(19);
             t.equal(labelForScope("blockTag", ["p"]), "blockTag/p");
             t.equal(labelForScope("inline", ["f"]), "inline/f");
             t.equal(labelForScope("chapter", ["1"]), "chapter/1");
@@ -49,6 +49,7 @@ test(
             t.equal(labelForScope("pubVerse", ["1"]), "pubVerse/1");
             t.equal(labelForScope("altChapter", ["1"]), "altChapter/1");
             t.equal(labelForScope("altVerse", ["1"]), "altVerse/1");
+            t.equal(labelForScope("esbCat", ["x"]), "esbCat/x");
             t.throws(() => labelForScope("banana"));
         } catch (err) {
             console.log(err)
@@ -60,7 +61,11 @@ test(
     `nComponentsForScope (${testGroup})`,
     async function (t) {
         try {
-            t.plan(1);
+            t.plan(5);
+            t.equal(nComponentsForScope("table"), 1);
+            t.equal(nComponentsForScope("blockTag"), 2);
+            t.equal(nComponentsForScope("cell"), 4);
+            t.equal(nComponentsForScope("attribute"), 6);
             t.throws(() => nComponentsForScope("banana"));
         } catch (err) {
             console.log(err)
