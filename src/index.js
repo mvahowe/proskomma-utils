@@ -1,4 +1,5 @@
 const serializedSchema = require('./schema/proskomma_serialized_0_2.json');
+const { inspectEnum, headerBytes } = require('./schema/inspect_succinct');
 const ByteArray = require('./lib/byte_array');
 const {generateId} = require('./lib/generate_id');
 const {graftLocation} = require('./lib/graft_defs');
@@ -12,6 +13,8 @@ module.exports = {
     ByteArray,
     generateId,
     graftLocation,
+    headerBytes,
+    inspectEnum,
     itemEnum,
     itemEnumLabels,
     labelForScope,

@@ -1,31 +1,22 @@
 const test = require('tape');
-const { labelForScope, nComponentsForScope } = require("../../src/lib/scope_defs");
+const fs = require('fs-extra');
+const path = require('path');
+const { inspectEnum } = require("../../src/schema/inspect_succinct");
 
-const testGroup = "Scope Def Edge Cases";
+const testGroup = "Inspect";
 
 test(
-    `labelForScope (${testGroup})`,
+    `enum (${testGroup})`,
     async function (t) {
         try {
-            t.plan(3);
-            t.equal(labelForScope("orphanTokens"), "orphanTokens");
-            t.equal(labelForScope("hangingGraft"), "hangingGraft");
-            t.throws(() => labelForScope("banana"));
+            const serialized = fs.readJsonSync(path.resolve(__dirname, "../test_data/serialize_example.json"));
+            t.plan(Object.keys(serialized.enums).length);
+            for (const enumString of Object.values(serialized.enums)) {
+                const inspected = inspectEnum(enumString);
+                t.ok(inspected);
+            }
         } catch (err) {
             console.log(err)
         }
     }
 );
-
-test(
-    `nComponentsForScope (${testGroup})`,
-    async function (t) {
-        try {
-            t.plan(1);
-            t.throws(() => nComponentsForScope("banana"));
-        } catch (err) {
-            console.log(err)
-        }
-    }
-);
-
