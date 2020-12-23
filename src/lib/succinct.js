@@ -42,4 +42,45 @@ const succinctGraftSeqId = (enums, enumIndexes, succinct, pos) => {
     return enums.ids.countedString(seqIndex);
 }
 
-module.exports = { headerBytes, succinctTokenChars, succinctScopeLabel, succinctGraftName, succinctGraftSeqId };
+const enumIndexes = (enums) => {
+    const ret = {};
+    for (const [category, succinct] of Object.entries(enums)) {
+        ret.category = enumIndex(category, succinct);
+    }
+    return enumIndexes;
+}
+
+const enumIndex = (category, enumSuccinct) => {
+    const indexSuccinct = new Uint32Array(enumSuccinct.length);
+    let pos = 0;
+    let count = 0;
+    while (pos < enumSuccinct.length) {
+        indexSuccinct[count] = pos;
+        const stringLength = enumSuccinct.byte(pos);
+        pos += (stringLength + 1);
+        count += 1;
+    }
+    return indexSuccinct;
+}
+
+const unpackEnum = (succinct) => {
+    let pos = 0;
+    const ret = [];
+    while (pos < succinct.length) {
+        const stringLength = succinct.byte(pos);
+        const unpacked = succinct.countedString(pos);
+        ret.push(unpacked);
+        pos += stringLength + 1;
+    }
+    return ret;
+}
+
+module.exports = {
+    headerBytes,
+    succinctTokenChars,
+    succinctScopeLabel,
+    succinctGraftName,
+    succinctGraftSeqId,
+    enumIndexes,
+    unpackEnum
+};

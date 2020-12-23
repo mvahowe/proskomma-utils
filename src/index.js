@@ -1,6 +1,6 @@
 const serializedSchema = require('./schema/proskomma_serialized_0_2.json');
 const { inspectEnum } = require('./schema/inspect_succinct');
-const { headerBytes, succinctTokenChars, succinctScopeLabel, succinctGraftName, succinctGraftSeqId } = require('./lib/succinct');
+const { headerBytes, succinctTokenChars, succinctScopeLabel, succinctGraftName, succinctGraftSeqId, enumIndexes, unpackEnum } = require('./lib/succinct');
 const ByteArray = require('./lib/byte_array');
 const {generateId} = require('./lib/generate_id');
 const {graftLocation} = require('./lib/graft_defs');
@@ -12,6 +12,7 @@ const { tokenEnum, tokenEnumLabels, tokenCategory } = require('./lib/token_defs'
 module.exports = {
     addTag,
     ByteArray,
+    enumIndexes,
     generateId,
     graftLocation,
     headerBytes,
@@ -30,6 +31,7 @@ module.exports = {
     tokenCategory,
     tokenEnum,
     tokenEnumLabels,
+    unpackEnum,
     validateTag,
     validateTags
 };
