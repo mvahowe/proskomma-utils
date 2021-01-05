@@ -33,7 +33,7 @@
     },
     "tags": {
       "type": "array",
-      "additionalItems": {
+      "items": {
         "type": "string",
         "$ref": "#/definitions/tagString"
       }
@@ -112,8 +112,19 @@
                     ],
                     "additionalProperties": false
                   }
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "$ref": "#/definitions/tagString"
+                  }
                 }
               },
+              "required": [
+                "blocks",
+                "tags"
+              ],
               "additionalProperties": false
             },
             "additionalItems": false
@@ -129,7 +140,8 @@
           },
           "tags": {
             "type": "array",
-            "additionalItems": {
+            "items": {
+              "type": "string",
               "$ref": "#/definitions/tagString"
             }
           }
@@ -137,7 +149,8 @@
         "required": [
           "sequences",
           "headers",
-          "mainId"
+          "mainId",
+          "tags"
         ],
         "additionalProperties": false
       }
@@ -147,7 +160,8 @@
   "required": [
     "id",
     "enums",
-    "docs"
+    "docs",
+    "tags"
   ],
   "additionalProperties": false
 }
