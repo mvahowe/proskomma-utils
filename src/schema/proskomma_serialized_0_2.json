@@ -130,7 +130,6 @@
           "tags": {
             "type": "array",
             "additionalItems": {
-              "type": "string",
               "$ref": "#/definitions/tagString"
             }
           }
