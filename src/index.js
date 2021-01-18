@@ -8,11 +8,13 @@ const { itemEnum, itemEnumLabels } = require('./lib/item_defs');
 const { scopeEnum, scopeEnumLabels, labelForScope, nComponentsForScope } = require("./lib/scope_defs");
 const {validateTags, validateTag, addTag} = require('./lib/tags');
 const { tokenEnum, tokenEnumLabels, tokenCategory } = require('./lib/token_defs');
+const { enumStringIndex } = require('./lib/enums');
 
 module.exports = {
     addTag,
     ByteArray,
     enumIndexes,
+    enumStringIndex,
     generateId,
     graftLocation,
     headerBytes,

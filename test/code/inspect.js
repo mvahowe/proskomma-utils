@@ -2,8 +2,9 @@ const test = require('tape');
 const fs = require('fs-extra');
 const path = require('path');
 const ByteArray = require("../../src/lib/byte_array");
-const { unpackEnum } = require("../../src/lib/succinct");
-const { inspectEnum, inspectSuccinct } = require("../../src/schema/inspect_succinct");
+const {unpackEnum} = require("../../src/lib/succinct");
+const {inspectEnum, inspectSuccinct} = require("../../src/schema/inspect_succinct");
+const { enumStringIndex } = require('../../src/lib/enums');
 
 const testGroup = "Inspect";
 
@@ -32,6 +33,9 @@ test(
         try {
             t.plan(Object.keys(serialized.enums).length);
             for (const [category, enumString] of Object.entries(serialized.enums)) {
+                const ba = new ByteArray();
+                ba.fromBase64(enumString);
+                const enumStrings = unpackEnum(ba);
                 const inspected = inspectEnum(enumString);
                 // console.log("***", category, "***");
                 // console.log(inspected);
@@ -57,6 +61,37 @@ test(
                     // console.log(inspected);
                     t.ok(inspected);
                 }
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+);
+
+test(
+    `enum index (${testGroup})`,
+    async function (t) {
+        try {
+            t.plan(Object.entries(serialized.enums).length);
+            for (const [category, enumString] of Object.entries(serialized.enums)) {
+                const ba = new ByteArray();
+                ba.fromBase64(enumString);
+                const enumValues = unpackEnum(ba);
+                let allGood = true;
+                let count = 0;
+                for (const enumValue of enumValues) {
+                    const enumIndex = enumStringIndex(ba, enumValue);
+                    if (enumIndex < 0) {
+                        allGood = false;
+                        break;
+                    }
+                    if (enumIndex !== count) {
+                        allGood = false;
+                        break;
+                    }
+                    count += 1;
+                }
+                t.ok(allGood);
             }
         } catch (err) {
             console.log(err)
