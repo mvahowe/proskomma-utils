@@ -1,5 +1,5 @@
 const test = require('tape');
-const { validateTags, validateTag, addTag } = require("../../src/lib/tags");
+const { validateTags, validateTag, addTag, removeTag } = require("../../src/lib/tags");
 
 const testGroup = "Tags";
 
@@ -40,6 +40,24 @@ test(
             t.ok(tags.has("frob"));
             t.throws(() => addTag(tags, "fooie!"));
             t.equal(tags.size, 3);
+        } catch (err) {
+            console.log(err)
+        }
+    }
+);
+
+test(
+    `Remove Tag (${testGroup})`,
+    async function (t) {
+        try {
+            t.plan(6);
+            let tags = new Set(["foo", "baa"]);
+            t.doesNotThrow(() => removeTag(tags,"frob"));
+            t.equal(tags.size, 2);
+            t.doesNotThrow(() => removeTag(tags,"foo"));
+            t.equal(tags.size, 1);
+            t.throws(() => removeTag(tags, "fooie!"));
+            t.equal(tags.size, 1);
         } catch (err) {
             console.log(err)
         }

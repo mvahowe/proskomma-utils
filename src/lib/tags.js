@@ -17,7 +17,12 @@ const addTag = (tags, tag) => {
   tags.add(tag);
 };
 
+const removeTag = (tags, tag) => {
+  validateTag(tag);
+  tags.delete(tag);
+};
+
 module.exports = {
-  validateTags, validateTag, addTag,
+  validateTags, validateTag, addTag, removeTag
 };
 
