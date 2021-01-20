@@ -1,5 +1,6 @@
 const { tokenCategory, tokenEnumLabels } = require('./token_defs');
 const { scopeEnumLabels, nComponentsForScope } = require("./scope_defs");
+const { itemEnum } = require('./item_defs');
 
 const headerBytes = (succinct, pos) =>{
     const headerByte = succinct.byte(pos);
@@ -80,8 +81,38 @@ const unpackEnum = (succinct, includeIndex) => {
     return ret;
 }
 
+const pushSuccinctTokenBytes = (bA, tokenEnumIndex, charsEnumIndex) => {
+    const lengthPos = bA.length;
+    bA.pushByte(0);
+    bA.pushByte(tokenEnumIndex);
+    bA.pushNByte(charsEnumIndex);
+    bA.setByte(lengthPos, (bA.length - lengthPos) | itemEnum.token << 6);
+}
+
+const pushSuccinctGraftBytes = (bA, graftTypeEnumIndex, seqEnumIndex) => {
+    const lengthPos = bA.length;
+    bA.pushByte(0);
+    bA.pushByte(graftTypeEnumIndex);
+    bA.pushNByte(seqEnumIndex);
+    bA.setByte(lengthPos, (bA.length - lengthPos) | itemEnum.graft << 6);
+}
+
+const pushSuccinctScopeBytes = (bA, itemTypeByte, scopeTypeByte, scopeBitBytes) => {
+    const lengthPos = bA.length;
+    bA.pushByte(0);
+    bA.pushByte(scopeTypeByte);
+
+    for (const sbb of scopeBitBytes) {
+        bA.pushNByte(sbb);
+    }
+    bA.setByte(lengthPos, (bA.length - lengthPos) | itemTypeByte << 6);
+}
+
 module.exports = {
     headerBytes,
+    pushSuccinctTokenBytes,
+    pushSuccinctGraftBytes,
+    pushSuccinctScopeBytes,
     succinctTokenChars,
     succinctScopeLabel,
     succinctGraftName,
