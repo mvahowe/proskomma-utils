@@ -118,5 +118,6 @@ module.exports = {
     succinctGraftName,
     succinctGraftSeqId,
     enumIndexes,
+    enumIndex,
     unpackEnum
 };
