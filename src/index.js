@@ -10,6 +10,7 @@ const {
     succinctGraftName,
     succinctGraftSeqId,
     enumIndexes,
+    enumIndex,
     unpackEnum
 } = require('./lib/succinct');
 const ByteArray = require('./lib/byte_array');
@@ -24,6 +25,7 @@ const { enumStringIndex } = require('./lib/enums');
 module.exports = {
     addTag,
     ByteArray,
+    enumIndex,
     enumIndexes,
     enumStringIndex,
     generateId,

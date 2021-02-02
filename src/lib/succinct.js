@@ -109,6 +109,8 @@ const pushSuccinctScopeBytes = (bA, itemTypeByte, scopeTypeByte, scopeBitBytes) 
 }
 
 module.exports = {
+    enumIndex,
+    enumIndexes,
     headerBytes,
     pushSuccinctTokenBytes,
     pushSuccinctGraftBytes,
@@ -117,7 +119,5 @@ module.exports = {
     succinctScopeLabel,
     succinctGraftName,
     succinctGraftSeqId,
-    enumIndexes,
-    enumIndex,
     unpackEnum
 };
