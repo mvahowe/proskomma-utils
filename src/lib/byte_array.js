@@ -144,6 +144,15 @@ class ByteArray {
         this.length = this.byteArray.length;
     }
 
+    deleteItem(n) {
+        const itemLength = this.byte(n) & 0x0000003F;
+        this.length -= itemLength;
+        if (this.length > n) {
+            const remainingBytes = this.byteArray.slice(n + itemLength);
+            this.byteArray.set(remainingBytes, n);
+        }
+    }
+
 }
 
 module.exports = ByteArray
