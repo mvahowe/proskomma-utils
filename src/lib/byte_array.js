@@ -95,6 +95,16 @@ class ByteArray {
         }
     }
 
+    pushNBytes(vArray) {
+        for (const v of vArray) {
+            try {
+                this.pushNByte(v);
+            } catch (err) {
+                throw Error(`Error from pushNByte, called as pushNBytes(${JSON.stringify(vArray)})`);
+            }
+        }
+    }
+
     nByte(n) {
         if (n > this.length - 1) {
             throw Error(`Attempt to read nByte ${n} of ByteArray of length ${this.length}`);
@@ -105,6 +115,33 @@ class ByteArray {
         } else {
             return v + (128 * this.nByte(n + 1));
         }
+    }
+
+    nBytes(n, nValues) {
+        const ret = [];
+        while (nValues > 0) {
+            let done = false;
+            let currentValue = 0;
+            let multiplier = 1;
+            do {
+                if (n > this.length - 1) {
+                    throw Error(`Attempt to read nByte ${n} of ByteArray of length ${this.length} in nBytes(${n}, ${nValues})`);
+                }
+                const v = this.byteArray[n];
+                if (v > 127) {
+                    currentValue += ((v - 128) * multiplier);
+                    ret.push(currentValue);
+                    currentValue = 0;
+                    done = true;
+                } else {
+                    currentValue += (v * multiplier);
+                    multiplier *= 128;
+                }
+                n++;
+            } while (!done);
+            nValues--;
+        }
+        return ret;
     }
 
     nByteLength(v) {
