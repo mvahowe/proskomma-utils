@@ -53,14 +53,17 @@ class ByteArray {
         this.length++;
     }
 
-    grow() {
+    grow(minNewSize) {
         const newBytes = new Uint8Array(
-            this.byteArray.length + (
-                Math.min(
-                    this.growMax,
-                    Math.max(
-                        16,
-                        this.byteArray.length
+            Math.max(
+                minNewSize || 0,
+                this.byteArray.length + (
+                    Math.min(
+                        this.growMax,
+                        Math.max(
+                            16,
+                            this.byteArray.length
+                        )
                     )
                 )
             )
@@ -188,6 +191,20 @@ class ByteArray {
             const remainingBytes = this.byteArray.slice(n + itemLength);
             this.byteArray.set(remainingBytes, n);
         }
+    }
+
+    insert(n, iba) {
+        const insertLength = iba.length;
+        const newLength = this.length + insertLength;
+        if (newLength >= (this.byteArray.length + insertLength)) {
+            this.grow(newLength);
+        }
+        if (n < newLength) {
+            const displacedBytes = this.byteArray.slice(n, this.length);
+            this.byteArray.set(displacedBytes, n + insertLength);
+        }
+        this.byteArray.set(iba.byteArray.slice(0, iba.length), n);
+        this.length = newLength;
     }
 
 }
