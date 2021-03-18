@@ -51,7 +51,7 @@ test(
     `succinct (${testGroup})`,
     async function (t) {
         try {
-            t.plan(10);
+            t.plan(12);
             const doc = Object.values(serialized.docs)[0];
             const mainSequence = doc.sequences[doc.mainId];
             for (const block of mainSequence.blocks) {

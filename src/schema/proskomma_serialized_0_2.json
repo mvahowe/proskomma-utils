@@ -101,6 +101,9 @@
                       },
                       "os": {
                         "type": "string"
+                      },
+                      "nt": {
+                        "type": "string"
                       }
                     },
                     "required": [
@@ -108,7 +111,8 @@
                       "bg",
                       "c",
                       "is",
-                      "os"
+                      "os",
+                      "nt"
                     ],
                     "additionalProperties": false
                   }
