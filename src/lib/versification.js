@@ -13,20 +13,18 @@ const vrs2json = vrsString => {
         if (!vrsLineBits) {
             continue;
         }
+        if (vrsLineBits[1] in ret) {
+        }
         ret[vrsLineBits[1]] = vrsLineBits[3];
     }
     return {mappedVerses: ret};
 }
 
 const reverseVersification = vrsJson => {
-    // Doesn't attempt to handle the hypothetical situation of verse ranges intersecting with versification ranges
+    // Assumes each verse is only mapped once
     const ret = {};
     for (const [fromSpec, toSpec] of Object.entries(vrsJson.mappedVerses)) {
-        if (toSpec in ret) {
-            ret[toSpec].push(fromSpec);
-        } else {
-            ret[toSpec] = [fromSpec];
-        }
+        toSpec in ret ? ret[toSpec].push(fromSpec): ret[toSpec] = [fromSpec];
     }
     return {reverseMappedVerses: ret};
 }

@@ -25,13 +25,17 @@ test(
     `reverseVersification (${testGroup})`,
     function (t) {
         try {
-            t.plan(1);
             const vrsString = fse.readFileSync(path.resolve(__dirname, '../test_data/versification.vrs')).toString();
             const vrsJson = vrs2json(vrsString);
+            const vrsJsonLength = Object.keys(vrsJson.mappedVerses).length;
+            t.plan(2 * vrsJsonLength);
             // console.log(JSON.stringify(vrsJson, null, 2));
             const reversed = reverseVersification(vrsJson);
-            console.log(JSON.stringify(reversed, null, 2));
-            t.ok(Object.keys(reversed.reverseMappedVerses).length > 0);
+            // console.log(JSON.stringify(reversed, null, 2));
+            for (const [key, value] of (Object.entries(vrsJson.mappedVerses))) {
+                t.ok(value in reversed.reverseMappedVerses);
+                t.ok(reversed.reverseMappedVerses[vrsJson.mappedVerses[key]].includes(key));
+            }
         } catch (err) {
             console.log(err);
         }
