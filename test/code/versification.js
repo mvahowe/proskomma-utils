@@ -2,7 +2,7 @@ const test = require('tape');
 const fse = require('fs-extra');
 const path = require('path');
 
-const { vrs2json, reverseVersification } = require("../../src/lib/versification");
+const { vrs2json, reverseVersification, preSuccinctVerseMapping } = require("../../src/lib/versification");
 
 const testGroup = 'Versification';
 
@@ -41,3 +41,35 @@ test(
         }
     },
 );
+
+test(
+    `preSuccinctVerseMapping (${testGroup})`,
+    function (t) {
+        try {
+            t.plan(16);
+            const vrsString = fse.readFileSync(path.resolve(__dirname, '../test_data/truncated_versification.vrs')).toString();
+            const vrsJson = vrs2json(vrsString);
+            const preSuccinct = preSuccinctVerseMapping(vrsJson.mappedVerses);
+            let preSuccinctBooks = ['GEN', 'LEV', 'PSA', 'ACT', 'S3Y'];
+            t.equal(Object.keys(preSuccinct).length, preSuccinctBooks.length);
+            for (const book of preSuccinctBooks) {
+                t.ok(book in preSuccinct);
+            }
+            t.ok('31' in preSuccinct['GEN']);
+            t.ok('32' in preSuccinct['GEN']);
+            const reversed = reverseVersification(vrsJson);
+            const preSuccinctReversed = preSuccinctVerseMapping(reversed.reverseMappedVerses);
+            preSuccinctBooks = ['GEN', 'LEV', 'PSA', 'ACT', 'DAG'];
+            t.equal(Object.keys(preSuccinctReversed).length, preSuccinctBooks.length);
+            for (const book of preSuccinctBooks) {
+                t.ok(book in preSuccinctReversed);
+            }
+            t.ok('5' in preSuccinctReversed['LEV']);
+            t.ok('6' in preSuccinctReversed['LEV']);
+            // console.log(JSON.stringify(preSuccinctReversed, null, 2));
+        } catch (err) {
+            console.log(err);
+        }
+    },
+);
+
