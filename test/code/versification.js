@@ -11,7 +11,7 @@ test(
     function (t) {
         try {
             t.plan(1);
-            const vrsString = fse.readFileSync(path.resolve(__dirname, '../test_data/versification.vrs')).toString();
+            const vrsString = fse.readFileSync(path.resolve(__dirname, '../test_data/truncated_versification.vrs')).toString();
             const vrsJson = vrs2json(vrsString);
             // console.log(JSON.stringify(vrsJson));
             t.ok(Object.keys(vrsJson.mappedVerses).length > 0);
@@ -25,7 +25,7 @@ test(
     `reverseVersification (${testGroup})`,
     function (t) {
         try {
-            const vrsString = fse.readFileSync(path.resolve(__dirname, '../test_data/versification.vrs')).toString();
+            const vrsString = fse.readFileSync(path.resolve(__dirname, '../test_data/truncated_versification.vrs')).toString();
             const vrsJson = vrs2json(vrsString);
             const vrsJsonLength = Object.keys(vrsJson.mappedVerses).length;
             t.plan(2 * vrsJsonLength);
