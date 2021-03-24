@@ -1,5 +1,128 @@
 const xre = require('xregexp');
 
+const ByteArray = require('./byte_array');
+
+const cvMappingType = 2;
+const bcvMappingType = 3;
+
+const bookCodes = [ // From Paratext via Scripture Burrito
+    "GEN",
+    "EXO",
+    "LEV",
+    "NUM",
+    "DEU",
+    "JOS",
+    "JDG",
+    "RUT",
+    "1SA",
+    "2SA",
+    "1KI",
+    "2KI",
+    "1CH",
+    "2CH",
+    "EZR",
+    "NEH",
+    "EST",
+    "JOB",
+    "PSA",
+    "PRO",
+    "ECC",
+    "SNG",
+    "ISA",
+    "JER",
+    "LAM",
+    "EZK",
+    "DAN",
+    "HOS",
+    "JOL",
+    "AMO",
+    "OBA",
+    "JON",
+    "MIC",
+    "NAM",
+    "HAB",
+    "ZEP",
+    "HAG",
+    "ZEC",
+    "MAL",
+    "MAT",
+    "MRK",
+    "LUK",
+    "JHN",
+    "ACT",
+    "ROM",
+    "1CO",
+    "2CO",
+    "GAL",
+    "EPH",
+    "PHP",
+    "COL",
+    "1TH",
+    "2TH",
+    "1TI",
+    "2TI",
+    "TIT",
+    "PHM",
+    "HEB",
+    "JAS",
+    "1PE",
+    "2PE",
+    "1JN",
+    "2JN",
+    "3JN",
+    "JUD",
+    "REV",
+    "TOB",
+    "JDT",
+    "ESG",
+    "WIS",
+    "SIR",
+    "BAR",
+    "LJE",
+    "S3Y",
+    "SUS",
+    "BEL",
+    "1MA",
+    "2MA",
+    "3MA",
+    "4MA",
+    "1ES",
+    "2ES",
+    "MAN",
+    "PS2",
+    "ODA",
+    "PSS",
+    "JSA",
+    "JDB",
+    "TBS",
+    "SST",
+    "DNT",
+    "BLT",
+    "EZA",
+    "5EZ",
+    "6EZ",
+    "DAG",
+    "PS3",
+    "2BA",
+    "LBA",
+    "JUB",
+    "ENO",
+    "1MQ",
+    "2MQ",
+    "3MQ",
+    "REP",
+    "4BA",
+    "LAO"
+    ];
+
+const bookCodeIndex = () => {
+    const ret = {};
+    for (const [bookN, book] of Object.entries(bookCodes)) {
+        ret[book] = parseInt(bookN);
+    }
+    return ret;
+}
+
 const vrs2json = vrsString => {
     const ret = {};
 
@@ -45,7 +168,7 @@ const preSuccinctVerseMapping = mappingJson => {
             fromV = vBits[0];
             toV = vBits[1];
         }
-        record.push([fromV, toV]);
+        record.push([parseInt(fromV), parseInt(toV)]);
         record.push([]);
 
         for (const toCVV of toSpecs.map(ts => ts.split(' ')[1])) {
@@ -57,9 +180,9 @@ const preSuccinctVerseMapping = mappingJson => {
                 toV = vBits[1];
             }
             if (record[0] === 'cv') {
-                record[2].push([toCh, fromV, toV]);
+                record[2].push([parseInt(toCh), parseInt(fromV), parseInt(toV)]);
             } else {
-                record[2].push([toBook, toCh, fromV, toV]);
+                record[2].push([parseInt(toCh), parseInt(fromV), parseInt(toV), toBook]);
             }
         }
         if (!(fromBook in ret)) {
@@ -73,4 +196,98 @@ const preSuccinctVerseMapping = mappingJson => {
     return ret;
 }
 
-module.exports = {vrs2json, reverseVersification, preSuccinctVerseMapping};
+const succinctifyVerseMappings = preSuccinct => {
+    const ret = {};
+    const bci = bookCodeIndex();
+    for (const [book, chapters] of Object.entries(preSuccinctVerseMapping(preSuccinct))) {
+        ret[book] = {};
+        for (const [chapter, mappings] of Object.entries(chapters)) {
+            ret[book][chapter] = succinctifyVerseMapping(mappings, bci);
+        }
+    }
+    return ret;
+}
+
+const succinctifyVerseMapping = (preSuccinctBC, bci) => {
+    const makeMappingLengthByte = (recordType, length) =>
+        length + (recordType * 64);
+
+    const ret = new ByteArray(64);
+    for (const [recordTypeStr, [fromVerseStart, fromVerseEnd], mappings] of preSuccinctBC) {
+        const pos = ret.length;
+        const recordType = recordTypeStr === 'bcv' ? bcvMappingType : cvMappingType;
+        ret.pushNBytes([0, fromVerseStart, fromVerseEnd]);
+        if (recordType === bcvMappingType) {
+            const bookIndex = bci[mappings[0][3]];
+            ret.pushNByte(bookIndex);
+        }
+        ret.pushNByte(mappings.length);
+        for (const [ch, fromV, toV] of mappings) {
+            ret.pushNBytes([ch, fromV, toV]);
+        }
+        const recordLength = ret.length - pos;
+        if (recordLength > 63) {
+            throw new Error(`Mapping in succinctifyVerseMapping ${JSON.stringify(mappings)} is too long (${recordLength} bytes)`);
+        }
+        ret.setByte(pos, makeMappingLengthByte(recordType, recordLength));
+    }
+    ret.trim();
+    return ret;
+}
+
+const mappingLengthByte = (succinct, pos) => {
+    const sByte = succinct.byte(pos);
+    return [
+        sByte >> 6,
+        sByte % 64,
+    ];
+}
+
+const unsuccinctifyVerseMapping = (succinctBC, fromBookCode, bci) => {
+    const ret = [];
+    let pos = 0;
+    while (pos < succinctBC.length) {
+        let recordPos = pos;
+        const unsuccinctRecord = {};
+        const [recordType, recordLength] = mappingLengthByte(succinctBC, pos);
+        recordPos++;
+        unsuccinctRecord.fromVerseStart = succinctBC.nByte(recordPos);
+        recordPos += succinctBC.nByteLength(unsuccinctRecord.fromVerseStart);
+        unsuccinctRecord.fromVerseEnd = succinctBC.nByte(recordPos);
+        recordPos += succinctBC.nByteLength(unsuccinctRecord.fromVerseEnd);
+        unsuccinctRecord.bookCode = fromBookCode;
+        if (recordType === bcvMappingType) {
+            const bookIndex = succinctBC.nByte(recordPos);
+            unsuccinctRecord.bookCode = bookCodes[bookIndex];
+            recordPos += succinctBC.nByteLength(bookIndex);
+        }
+        const nMappings = succinctBC.nByte(recordPos);
+        recordPos += succinctBC.nByteLength(nMappings);
+        const mappings = [];
+        while(mappings.length < nMappings) {
+            const mapping = {};
+            mapping.ch = succinctBC.nByte(recordPos);
+            recordPos += succinctBC.nByteLength(mapping.ch);
+            mapping.verseStart = succinctBC.nByte(recordPos);
+            recordPos += succinctBC.nByteLength(mapping.verseStart);
+            mapping.verseEnd = succinctBC.nByte(recordPos);
+            recordPos += succinctBC.nByteLength(mapping.verseEnd);
+            mappings.push(mapping);
+        }
+        unsuccinctRecord.mapping = mappings;
+        ret.push(unsuccinctRecord);
+        pos += recordLength;
+    }
+    return ret;
+}
+
+module.exports = {
+    vrs2json,
+    reverseVersification,
+    preSuccinctVerseMapping,
+    bookCodes,
+    succinctifyVerseMapping,
+    succinctifyVerseMappings,
+    unsuccinctifyVerseMapping,
+    bookCodeIndex
+};
