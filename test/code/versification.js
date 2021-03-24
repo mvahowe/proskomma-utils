@@ -118,7 +118,7 @@ test(
     `unsuccinctify forward (${testGroup})`,
     function (t) {
         try {
-            t.plan(18);
+            t.plan(15);
             const vrsString = fse.readFileSync(path.resolve(__dirname, '../test_data/truncated_versification.vrs')).toString();
             const vrsJson = vrs2json(vrsString);
             const svm = succinctifyVerseMappings(vrsJson.mappedVerses);
@@ -128,7 +128,6 @@ test(
             t.equal(unsuccinctS3Y[0].bookCode, 'DAG');
             t.equal(unsuccinctS3Y[0].mapping[0].ch, 3);
             t.equal(unsuccinctS3Y[0].mapping[0].verseStart, 24);
-            t.equal(unsuccinctS3Y[0].mapping[0].verseEnd, 52);
             const unsuccinctACT = unsuccinctifyVerseMapping(svm['ACT']['19'], 'ACT', bookCodeIndex());
             // console.log(JSON.stringify(unsuccinctACT, null, 2));
             t.equal(unsuccinctACT[0].fromVerseStart, 40);
@@ -136,13 +135,11 @@ test(
             t.equal(unsuccinctACT[0].bookCode, 'ACT');
             t.equal(unsuccinctACT[0].mapping[0].ch, 19);
             t.equal(unsuccinctACT[0].mapping[0].verseStart, 40);
-            t.equal(unsuccinctACT[0].mapping[0].verseEnd, 40);
             t.equal(unsuccinctACT[1].fromVerseStart, 41);
             t.equal(unsuccinctACT[1].fromVerseEnd, 41);
             t.equal(unsuccinctACT[1].bookCode, 'ACT');
             t.equal(unsuccinctACT[1].mapping[0].ch, 19);
             t.equal(unsuccinctACT[1].mapping[0].verseStart, 40);
-            t.equal(unsuccinctACT[1].mapping[0].verseEnd, 40);
         } catch (err) {
             console.log(err);
         }
@@ -153,7 +150,7 @@ test(
     `unsuccinctify reverse (${testGroup})`,
     function (t) {
         try {
-            t.plan(15);
+            t.plan(12);
             const vrsString = fse.readFileSync(path.resolve(__dirname, '../test_data/truncated_versification.vrs')).toString();
             const vrsJson = vrs2json(vrsString);
             const reversedJson = reverseVersification(vrsJson);
@@ -164,17 +161,14 @@ test(
             t.equal(unsuccinctDAG[0].bookCode, 'S3Y');
             t.equal(unsuccinctDAG[0].mapping[0].ch, 1);
             t.equal(unsuccinctDAG[0].mapping[0].verseStart, 1);
-            t.equal(unsuccinctDAG[0].mapping[0].verseEnd, 29);
             const unsuccinctACT = unsuccinctifyVerseMapping(svm['ACT']['19'], 'ACT', bookCodeIndex());
             t.equal(unsuccinctACT[0].fromVerseStart, 40);
             t.equal(unsuccinctACT[0].fromVerseEnd, 40);
             t.equal(unsuccinctACT[0].bookCode, 'ACT');
             t.equal(unsuccinctACT[0].mapping[0].ch, 19);
             t.equal(unsuccinctACT[0].mapping[0].verseStart, 40);
-            t.equal(unsuccinctACT[0].mapping[0].verseEnd, 40);
             t.equal(unsuccinctACT[0].mapping[1].ch, 19);
             t.equal(unsuccinctACT[0].mapping[1].verseStart, 41);
-            t.equal(unsuccinctACT[0].mapping[1].verseEnd, 41);
         } catch (err) {
             console.log(err);
         }

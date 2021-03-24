@@ -222,8 +222,8 @@ const succinctifyVerseMapping = (preSuccinctBC, bci) => {
             ret.pushNByte(bookIndex);
         }
         ret.pushNByte(mappings.length);
-        for (const [ch, fromV, toV] of mappings) {
-            ret.pushNBytes([ch, fromV, toV]);
+        for (const [ch, fromV] of mappings) {
+            ret.pushNBytes([ch, fromV]);
         }
         const recordLength = ret.length - pos;
         if (recordLength > 63) {
@@ -270,8 +270,6 @@ const unsuccinctifyVerseMapping = (succinctBC, fromBookCode, bci) => {
             recordPos += succinctBC.nByteLength(mapping.ch);
             mapping.verseStart = succinctBC.nByte(recordPos);
             recordPos += succinctBC.nByteLength(mapping.verseStart);
-            mapping.verseEnd = succinctBC.nByte(recordPos);
-            recordPos += succinctBC.nByteLength(mapping.verseEnd);
             mappings.push(mapping);
         }
         unsuccinctRecord.mapping = mappings;
@@ -312,8 +310,6 @@ const mapVerse = (succinct, b, c, v) => {
             recordPos += succinct.nByteLength(ch);
             const verseStart = succinct.nByte(recordPos);
             recordPos += succinct.nByteLength(verseStart);
-            const verseEnd = succinct.nByte(recordPos);
-            recordPos += succinct.nByteLength(verseEnd);
             ret[1].push([ch, (v - fromVerseStart) + verseStart]);
         }
         break;
