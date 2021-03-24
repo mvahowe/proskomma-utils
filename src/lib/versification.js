@@ -281,6 +281,46 @@ const unsuccinctifyVerseMapping = (succinctBC, fromBookCode, bci) => {
     return ret;
 }
 
+const mapVerse = (succinct, b, c, v) => {
+    // Succinct for one chapter.
+    // Pass book and chapter to provide complete response in each case.
+    let ret = null;
+    let pos = 0;
+    while (pos < succinct.length) {
+        let recordPos = pos;
+        const [recordType, recordLength] = mappingLengthByte(succinct, pos);
+        recordPos++;
+        const fromVerseStart = succinct.nByte(recordPos);
+        recordPos += succinct.nByteLength(fromVerseStart);
+        const fromVerseEnd = succinct.nByte(recordPos);
+        recordPos += succinct.nByteLength(fromVerseEnd);
+        if (v < fromVerseStart || v > fromVerseEnd) {
+            pos += recordLength;
+            continue;
+        }
+        let bookCode = b;
+        if (recordType === bcvMappingType) {
+            const bookIndex = succinct.nByte(recordPos);
+            bookCode = bookCodes[bookIndex];
+            recordPos += succinct.nByteLength(bookIndex);
+        }
+        ret = [bookCode, []];
+        const nMappings = succinct.nByte(recordPos);
+        recordPos += succinct.nByteLength(nMappings);
+        while (ret[1].length < nMappings) {
+            const ch = succinct.nByte(recordPos);
+            recordPos += succinct.nByteLength(ch);
+            const verseStart = succinct.nByte(recordPos);
+            recordPos += succinct.nByteLength(verseStart);
+            const verseEnd = succinct.nByte(recordPos);
+            recordPos += succinct.nByteLength(verseEnd);
+            ret[1].push([ch, (v - fromVerseStart) + verseStart]);
+        }
+        break;
+    }
+    return ret || [b, [[c, v]]];
+}
+
 module.exports = {
     vrs2json,
     reverseVersification,
@@ -289,5 +329,6 @@ module.exports = {
     succinctifyVerseMapping,
     succinctifyVerseMappings,
     unsuccinctifyVerseMapping,
-    bookCodeIndex
+    bookCodeIndex,
+    mapVerse,
 };

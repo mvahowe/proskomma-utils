@@ -1,6 +1,7 @@
 const test = require('tape');
 const fse = require('fs-extra');
 const path = require('path');
+const deepEqual = require('deep-equal');
 
 const {
     vrs2json,
@@ -9,6 +10,7 @@ const {
     succinctifyVerseMappings,
     unsuccinctifyVerseMapping,
     bookCodeIndex,
+    mapVerse,
 } = require("../../src/lib/versification");
 
 const testGroup = 'Versification';
@@ -178,3 +180,60 @@ test(
         }
     },
 );
+
+test(
+    `mapVerse forward (${testGroup})`,
+    function (t) {
+        try {
+            const vrsString = fse.readFileSync(path.resolve(__dirname, '../test_data/truncated_versification.vrs')).toString();
+            const mappings = [
+                [["GEN", 31, 1], ["GEN", 31, 1]],
+                [["GEN", 31, 55], ["GEN", 32, 1]],
+                [["GEN", 32, 17], ["GEN", 32, 18]],
+                [["ACT", 19, 40], ["ACT",19, 40]],
+                [["ACT", 19, 41], ["ACT",19, 40]],
+                [["S3Y", 1, 2], ["DAG", 3, 25]],
+            ];
+            t.plan(3 * mappings.length);
+            const vrsJson = vrs2json(vrsString);
+            const svm = succinctifyVerseMappings(vrsJson.mappedVerses);
+            for (const [[fromBook, fromCh, fromV], [toBook, toCh, toV]] of mappings) {
+                const succinct = svm[fromBook][fromCh.toString()];
+                const mapping = mapVerse(succinct, fromBook, fromCh, fromV);
+                t.equal(mapping[0], toBook);
+                t.equal(mapping[1][0][0], toCh);
+                t.equal(mapping[1][0][1], toV);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    },
+);
+
+test(
+    `mapVerse reverse (${testGroup})`,
+    function (t) {
+        try {
+            const vrsString = fse.readFileSync(path.resolve(__dirname, '../test_data/truncated_versification.vrs')).toString();
+            const mappings = [
+                [["GEN", 32, 99], ["GEN", [[32, 99]]]],
+                [["GEN", 32, 1], ["GEN", [[31, 55]]]],
+                [["GEN", 32, 18], ["GEN", [[32, 17]]]],
+                [["ACT", 19, 40], ["ACT", [[19, 40], [19, 41]]]],
+                [["DAG", 3, 25], ["S3Y", [[1, 2]]]],
+            ];
+            t.plan(2 * mappings.length);
+            const reverseJson = reverseVersification(vrs2json(vrsString));
+            const svm = succinctifyVerseMappings(reverseJson.reverseMappedVerses);
+            for (const [[fromBook, fromCh, fromV], [toBook, toSpecs]] of mappings) {
+                const succinct = svm[fromBook][fromCh.toString()];
+                const mapping = mapVerse(succinct, fromBook, fromCh, fromV);
+                t.equal(mapping[0], toBook);
+                t.ok(deepEqual(mapping[1], toSpecs));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    },
+);
+

@@ -24,6 +24,7 @@
   "dependencies": {
     "@babel/core": "^7.12.9",
     "base64-js": "^1.5.1",
+    "deep-equal": "^2.0.5",
     "jsonschema": "^1.4.0",
     "path": "^0.12.7",
     "utf8-string-bytes": "^1.0.3",
