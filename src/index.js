@@ -24,11 +24,12 @@ const { enumStringIndex } = require('./lib/enums');
 const {
     vrs2json,
     reverseVersification,
+    preSuccinctVerseMappings,
     succinctifyVerseMapping,
     succinctifyVerseMappings,
     unsuccinctifyVerseMapping,
     mapVerse,
-} = require('../lib/versification');
+} = require('./lib/versification');
 
 module.exports = {
     addTag,
@@ -45,6 +46,7 @@ module.exports = {
     labelForScope,
     mapVerse,
     nComponentsForScope,
+    preSuccinctVerseMappings,
     pushSuccinctTokenBytes,
     pushSuccinctGraftBytes,
     pushSuccinctScopeBytes,
