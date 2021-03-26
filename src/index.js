@@ -21,6 +21,14 @@ const { scopeEnum, scopeEnumLabels, labelForScope, nComponentsForScope } = requi
 const {validateTags, validateTag, addTag, removeTag} = require('./lib/tags');
 const { tokenEnum, tokenEnumLabels, tokenCategory } = require('./lib/token_defs');
 const { enumStringIndex } = require('./lib/enums');
+const {
+    vrs2json,
+    reverseVersification,
+    succinctifyVerseMapping,
+    succinctifyVerseMappings,
+    unsuccinctifyVerseMapping,
+    mapVerse,
+} = require('../lib/versification');
 
 module.exports = {
     addTag,
@@ -35,11 +43,13 @@ module.exports = {
     itemEnum,
     itemEnumLabels,
     labelForScope,
+    mapVerse,
     nComponentsForScope,
     pushSuccinctTokenBytes,
     pushSuccinctGraftBytes,
     pushSuccinctScopeBytes,
     removeTag,
+    reverseVersification,
     scopeEnum,
     scopeEnumLabels,
     serializedSchema,
@@ -47,10 +57,14 @@ module.exports = {
     succinctScopeLabel,
     succinctGraftName,
     succinctGraftSeqId,
+    succinctifyVerseMapping,
+    succinctifyVerseMappings,
     tokenCategory,
     tokenEnum,
     tokenEnumLabels,
     unpackEnum,
+    unsuccinctifyVerseMapping,
     validateTag,
-    validateTags
+    validateTags,
+    vrs2json,
 };
