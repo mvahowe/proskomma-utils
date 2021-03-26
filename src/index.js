@@ -24,7 +24,7 @@ const { enumStringIndex } = require('./lib/enums');
 const {
     vrs2json,
     reverseVersification,
-    preSuccinctVerseMappings,
+    preSuccinctVerseMapping,
     succinctifyVerseMapping,
     succinctifyVerseMappings,
     unsuccinctifyVerseMapping,
@@ -46,7 +46,7 @@ module.exports = {
     labelForScope,
     mapVerse,
     nComponentsForScope,
-    preSuccinctVerseMappings,
+    preSuccinctVerseMapping,
     pushSuccinctTokenBytes,
     pushSuccinctGraftBytes,
     pushSuccinctScopeBytes,
