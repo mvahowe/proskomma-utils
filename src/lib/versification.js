@@ -136,9 +136,10 @@ const vrs2json = vrsString => {
         if (!vrsLineBits) {
             continue;
         }
-        if (vrsLineBits[1] in ret) {
+        if (!(vrsLineBits[1] in ret)) {
+            ret[vrsLineBits[1]] = [];
         }
-        ret[vrsLineBits[1]] = vrsLineBits[3];
+        ret[vrsLineBits[1]].push(vrsLineBits[3]);
     }
     return {mappedVerses: ret};
 }
@@ -146,8 +147,10 @@ const vrs2json = vrsString => {
 const reverseVersification = vrsJson => {
     // Assumes each verse is only mapped from once
     const ret = {};
-    for (const [fromSpec, toSpec] of Object.entries(vrsJson.mappedVerses)) {
-        toSpec in ret ? ret[toSpec].push(fromSpec): ret[toSpec] = [fromSpec];
+    for (const [fromSpec, toSpecs] of Object.entries(vrsJson.mappedVerses)) {
+        for (const toSpec of toSpecs) {
+            toSpec in ret ? ret[toSpec].push(fromSpec) : ret[toSpec] = [fromSpec];
+        }
     }
     return {reverseMappedVerses: ret};
 }

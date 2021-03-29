@@ -37,13 +37,12 @@ test(
             const vrsString = fse.readFileSync(path.resolve(__dirname, '../test_data/truncated_versification.vrs')).toString();
             const vrsJson = vrs2json(vrsString);
             const vrsJsonLength = Object.keys(vrsJson.mappedVerses).length;
-            t.plan(2 * vrsJsonLength);
+            t.plan(vrsJsonLength);
             // console.log(JSON.stringify(vrsJson, null, 2));
             const reversed = reverseVersification(vrsJson);
             // console.log(JSON.stringify(reversed, null, 2));
             for (const [key, value] of (Object.entries(vrsJson.mappedVerses))) {
-                t.ok(value in reversed.reverseMappedVerses);
-                t.ok(reversed.reverseMappedVerses[vrsJson.mappedVerses[key]].includes(key));
+                t.ok(value[0] in reversed.reverseMappedVerses);
             }
         } catch (err) {
             console.log(err);
@@ -184,6 +183,8 @@ test(
                 [["GEN", 31, 1], ["GEN", 31, 1]],
                 [["GEN", 31, 55], ["GEN", 32, 1]],
                 [["GEN", 32, 17], ["GEN", 32, 18]],
+                [["PSA", 51, 0], ["PSA", 51, 1]],
+                [["PSA", 51, 1], ["PSA", 51, 3]],
                 [["ACT", 19, 40], ["ACT",19, 40]],
                 [["ACT", 19, 41], ["ACT",19, 40]],
                 [["S3Y", 1, 2], ["DAG", 3, 25]],
@@ -213,11 +214,17 @@ test(
                 [["GEN", 32, 99], ["GEN", [[32, 99]]]],
                 [["GEN", 32, 1], ["GEN", [[31, 55]]]],
                 [["GEN", 32, 18], ["GEN", [[32, 17]]]],
+                [["PSA", 51, 1], ["PSA", [[51, 0]]]],
+                [["PSA", 51, 2], ["PSA", [[51, 0]]]],
+                [["PSA", 51, 3], ["PSA", [[51, 1]]]],
                 [["ACT", 19, 40], ["ACT", [[19, 40], [19, 41]]]],
                 [["DAG", 3, 25], ["S3Y", [[1, 2]]]],
             ];
             t.plan(2 * mappings.length);
-            const reverseJson = reverseVersification(vrs2json(vrsString));
+            const forwardJson = vrs2json(vrsString);
+            // console.log(JSON.stringify(forwardJson, null, 2))
+            const reverseJson = reverseVersification(forwardJson);
+            // console.log(JSON.stringify(reverseJson, null, 2))
             const svm = succinctifyVerseMappings(reverseJson.reverseMappedVerses);
             for (const [[fromBook, fromCh, fromV], [toBook, toSpecs]] of mappings) {
                 const succinct = svm[fromBook][fromCh.toString()];
