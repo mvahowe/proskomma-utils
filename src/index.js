@@ -20,7 +20,7 @@ const { itemEnum, itemEnumLabels } = require('./lib/item_defs');
 const { scopeEnum, scopeEnumLabels, labelForScope, nComponentsForScope } = require("./lib/scope_defs");
 const {validateTags, validateTag, addTag, removeTag} = require('./lib/tags');
 const { tokenEnum, tokenEnumLabels, tokenCategory } = require('./lib/token_defs');
-const { enumStringIndex } = require('./lib/enums');
+const { enumStringIndex, enumRegexIndexTuples } = require('./lib/enums');
 const {
     vrs2json,
     reverseVersification,
@@ -36,6 +36,7 @@ module.exports = {
     ByteArray,
     enumIndex,
     enumIndexes,
+    enumRegexIndexTuples,
     enumStringIndex,
     generateId,
     graftLocation,
