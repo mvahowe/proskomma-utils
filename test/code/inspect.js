@@ -4,7 +4,7 @@ const path = require('path');
 const ByteArray = require("../../src/lib/byte_array");
 const {unpackEnum} = require("../../src/lib/succinct");
 const {inspectEnum, inspectSuccinct} = require("../../src/schema/inspect_succinct");
-const { enumStringIndex } = require('../../src/lib/enums');
+const {enumStringIndex, enumRegexIndexTuples} = require('../../src/lib/enums');
 
 const testGroup = "Inspect";
 
@@ -92,6 +92,27 @@ test(
                     count += 1;
                 }
                 t.ok(allGood);
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+);
+
+test(
+    `enum regex indexes (${testGroup})`,
+    async function (t) {
+        try {
+            const expectedTokens = ['you', 'your', 'young', 'yourself', 'You', 'Your'];
+            t.plan(1 + expectedTokens.length);
+            const enumString = serialized.enums.wordLike;
+            const ba = new ByteArray();
+            ba.fromBase64(enumString);
+            const enumIndexes = enumRegexIndexTuples(ba, 'You');
+            const foundTokens = enumIndexes.map(ei => ei[1]);
+            t.equal(foundTokens.length, expectedTokens.length);
+            for (const expectedToken of expectedTokens) {
+                t.ok(foundTokens.includes(expectedToken));
             }
         } catch (err) {
             console.log(err)
