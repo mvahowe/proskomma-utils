@@ -123,11 +123,25 @@
                     "type": "string",
                     "$ref": "#/definitions/tagString"
                   }
+                },
+                "chapters": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "chapterVerses": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
                 }
               },
               "required": [
                 "blocks",
-                "tags"
+                "tags",
+                "chapters",
+                "chapterVerses"
               ],
               "additionalProperties": false
             },

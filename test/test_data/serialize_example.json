@@ -17,6 +17,14 @@
         "XGatMESkGk1q": {
           "type": "main",
           "tags": ["testing"],
+          "chapters": {
+            "1": "aBCde",
+            "2": "fGHiJ"
+          },
+          "chapterVerses": {
+            "1": "aBCde",
+            "2": "fGHiJ"
+          },
           "blocks": [
             {
               "bs": "gwCA",
@@ -39,6 +47,14 @@
         "FPs3bSNZHua.": {
           "type": "title",
           "tags": ["abc:testing"],
+          "chapters": {
+            "1": "aBCde",
+            "2": "fGHiJ"
+          },
+          "chapterVerses": {
+            "1": "aBCde",
+            "2": "fGHiJ"
+          },
           "blocks": [
             {
               "bs": "gwCb",
