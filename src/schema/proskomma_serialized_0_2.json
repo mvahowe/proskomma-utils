@@ -135,6 +135,12 @@
                   "additionalProperties": {
                     "type": "string"
                   }
+                },
+                "tokensPresent": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
                 }
               },
               "required": [
