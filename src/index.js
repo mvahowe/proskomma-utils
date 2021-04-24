@@ -30,9 +30,18 @@ const {
     unsuccinctifyVerseMapping,
     mapVerse,
 } = require('./lib/versification');
+const {
+    aghast2items,
+    aghast2string,
+    items2aghast,
+    string2aghast,
+
+} = require('../lib/aghast');
 
 module.exports = {
     addTag,
+    aghast2items,
+    aghast2string,
     ByteArray,
     enumIndex,
     enumIndexes,
@@ -44,6 +53,7 @@ module.exports = {
     inspectEnum,
     itemEnum,
     itemEnumLabels,
+    items2aghast,
     labelForScope,
     mapVerse,
     nComponentsForScope,
@@ -56,6 +66,7 @@ module.exports = {
     scopeEnum,
     scopeEnumLabels,
     serializedSchema,
+    string2aghast,
     succinctTokenChars,
     succinctScopeLabel,
     succinctGraftName,
