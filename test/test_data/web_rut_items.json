@@ -2953,5 +2953,25 @@
     "type": "token",
     "subType": "punctuation",
     "payload": "”"
+  },
+  {
+    "type": "scope",
+    "subType": "end",
+    "payload": "span/bd"
+  },
+  {
+    "type": "scope",
+    "subType": "end",
+    "payload": "verses/9"
+  },
+  {
+    "type": "scope",
+    "subType": "end",
+    "payload": "verse/9"
+  },
+  {
+    "type": "scope",
+    "subType": "end",
+    "payload": "chapter/1"
   }
 ]

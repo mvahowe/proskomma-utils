@@ -7,6 +7,15 @@ const printableRegexes = [
 ];
 const mainRegex = xre.union(printableRegexes.map(pr => pr[1]));
 
+const aghastRegexes = [
+    ['chapter', xre('^(\\s*)<c (\\d+)>\\s*$')], // <indent> <ch no>
+    ['verses', xre('^(\\s*)<v (\\d+(-\\d+)?)>\\s*$')], // <indent> <v no>
+    ['graft', xre('^(\\s*)=>\\s?([\\S]+)\\s+([\\S]+)\\s*$')], // <indent> <subType> <seqId>
+    ['charTag', xre('^(\\s*)<([a-z][a-z1-9]*)>\\s*$')], // <indent> <tagName>
+    ['tokens', xre("^(\\s*)'([^']*)'\\s*$")], // <indent> <text>
+
+];
+
 
 const openChapter = (ret, ch) => {
     ret.push({
@@ -235,7 +244,7 @@ const aghast2string = aghast => {
                 ret.push(`${' '.repeat(a[0] * 4)}<${a[2]}>`);
                 break;
             case 'graft':
-                ret.push(`${' '.repeat(a[0] * 4)}=> ${a[2]} (${a[3]})`);
+                ret.push(`${' '.repeat(a[0] * 4)}=> ${a[2]} ${a[3]}`);
                 break;
             default:
                 throw new Error(`Unexpected aghast element '${a[1]}'`);
@@ -244,7 +253,41 @@ const aghast2string = aghast => {
     return ret.join('\n');
 };
 
-const string2aghast = str => [];
+const string2aghast = str => {
+    const ret = [];
+    for (const [n, line] of str.split(/[\n\r]+/).entries()) {
+        let found = null;
+        for (const [regexType, regex] of aghastRegexes) {
+            const match = xre.exec(line, regex, 0, true);
+            if (match) {
+                found = true;
+                switch (regexType) {
+                    case 'chapter':
+                        ret.push([match[1].length / 4, regexType, match[2]]);
+                        break;
+                    case 'verses':
+                        ret.push([match[1].length / 4, regexType, match[2]]);
+                        break;
+                    case 'tokens':
+                        ret.push([match[1].length / 4, regexType, match[2]]);
+                        break;
+                    case 'charTag':
+                        ret.push([match[1].length / 4, regexType, match[2]]);
+                        break;
+                    case 'graft':
+                        ret.push([match[1].length / 4, regexType, match[2], match[3]]);
+                        break;
+                }
+                break;
+            }
+        }
+        if (!found) {
+            throw new Error(`Could not parse ''${line}'' at line ${n}`);
+        }
+    }
+
+    return ret;
+};
 
 module.exports = {
     aghast2items,
