@@ -2925,6 +2925,11 @@
     "payload": " "
   },
   {
+    "type": "scope",
+    "subType": "start",
+    "payload": "span/bd"
+  },
+  {
     "type": "token",
     "subType": "wordLike",
     "payload": "her"

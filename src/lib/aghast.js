@@ -1,3 +1,68 @@
+const xre = require('xregexp');
+
+const printableRegexes = [
+    ['wordLike', xre('([\\p{Letter}\\p{Number}\\p{Mark}\\u2060]{1,127})')],
+    ['lineSpace', xre('([\\p{Separator}]{1,127})')],
+    ['punctuation', xre('([\\p{Punctuation}+®])')],
+];
+const mainRegex = xre.union(printableRegexes.map(pr => pr[1]));
+
+
+const openChapter = (ret, ch) => {
+    ret.push({
+        type: 'scope',
+        subType: 'start',
+        payload: `chapter/${ch}`
+    });
+}
+
+const closeChapter = (ret, ch) => {
+    ret.push({
+        type: 'scope',
+        subType: 'end',
+        payload: `chapter/${ch}`
+    });
+}
+
+const numbersFromVerseRange = vr => {
+    if (vr.includes('-')) {
+        const [fromV, toV] = vr.split('-').map(v => parseInt(v));
+        return Array.from(Array((toV - fromV) + 1).keys()).map(v => v + fromV);
+    } else {
+        return [parseInt(vr)];
+    }
+}
+
+const openVerseRange = (ret, vr) => {
+    numbersFromVerseRange(vr).forEach(
+        v => ret.push({
+            type: 'scope',
+            subType: 'start',
+            payload: `verse/${v}`
+        }),
+    );
+    ret.push({
+        type: 'scope',
+        subType: 'start',
+        payload: `verses/${vr}`
+    });
+}
+
+const closeVerseRange = (ret, vr) => {
+    ret.push({
+        type: 'scope',
+        subType: 'end',
+        payload: `verses/${vr}`
+    });
+    numbersFromVerseRange(vr).forEach(
+        v => ret.push({
+            type: 'scope',
+            subType: 'end',
+            payload: `verse/${v}`
+        }),
+    );
+}
+
 const items2aghast = items => {
     const ret = [];
     let indent = 0;
@@ -49,36 +114,105 @@ const items2aghast = items => {
 
 const aghast2items = aghast => {
     const ret = [];
-    let indent = 0;
-    const stack = [];
+    let indents = [];
+    const indented = [];
     let chapter = "";
     let verses = "";
-    for (const a of aghast) {
+    for (const [n, a] of aghast.entries()) {
+        // If more indented than indents, require new indent, else no new indent
+        const previousIndent = indents[0] || 0;
+        if (indented.length > indents.length) {
+            if (a[0] <= previousIndent) {
+                throw new Error(`Required indent not found at line ${n}`);
+            }
+            indents.unshift(a[0]);
+        } else {
+            if (a[0] > previousIndent) {
+                throw new Error(`Unexpected indent at line ${n}`);
+            }
+        }
         // check for decreased indent
+        if (a[0] < previousIndent) {
+            let done = false;
+            while (!done && indented.length > 0) {
+                indents.shift();
+                const closingIndented = indented.shift();
+                ret.push({
+                    type: 'scope',
+                    subType: 'end',
+                    payload: `span/${closingIndented}`
+                });
+                if ((indents[0] || 0) === a[0]) {
+                    done = true;
+                }
+            }
+        }
         switch (a[1]) {
             case 'chapter':
                 if (chapter !== '') {
-                    ret.push({
-                        type: 'scope',
-                        subType: 'end',
-                        payload: `chapter/${chapter}`
-                    });
+                    if (verses !== '') {
+                        closeVerseRange(ret, verses);
+                        verses = '';
+                    }
+                    closeChapter(ret, chapter);
                 }
                 chapter = a[2];
+                openChapter(ret, chapter);
+                verses = "";
+                break;
+            case 'verses':
+                if (verses !== '') {
+                    closeVerseRange(ret, verses);
+                }
+                verses = a[2];
+                openVerseRange(ret, verses);
+                break;
+            case 'graft':
+                ret.push({
+                    type: 'graft',
+                    subType: a[2],
+                    payload: a[3],
+                });
+                break;
+            case 'tokens':
+                const tokenArray = xre.match(a[2], mainRegex, 'all');
+                for (const token of tokenArray) {
+                    for (const [tSubtype, tRegex] of printableRegexes) {
+                        if (xre.test(token, tRegex, 0, true)) {
+                            ret.push({
+                                type: 'token',
+                                subType: tSubtype,
+                                payload: token,
+                            });
+                            break;
+                        }
+                    }
+                }
+                break;
+            case 'charTag':
                 ret.push({
                     type: 'scope',
                     subType: 'start',
-                    payload: `chapter/${chapter}`
+                    payload: `span/${a[2]}`
                 });
+                indented.unshift(a[2]);
                 break;
         }
     }
-    if (chapter !== '') {
+    while (indented.length > 0) {
+        indents.shift();
+        const closingIndented = indented.shift();
         ret.push({
             type: 'scope',
             subType: 'end',
-            payload: `chapter/${chapter}`
+            payload: `span/${closingIndented}`
         });
+    }
+    if (verses !== '') {
+        closeVerseRange(ret, verses);
+    }
+    if (chapter !== '') {
+        closeChapter(ret, chapter);
     }
     return ret;
 };

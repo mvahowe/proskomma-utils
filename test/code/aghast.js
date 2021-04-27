@@ -34,7 +34,7 @@ test(
             const agh = items2aghast(testItems);
             const aItems = aghast2items(agh);
             t.ok(aItems.length > 0);
-            console.log(aItems);
+            // console.log(JSON.stringify(aItems, null, 2));
         } catch (err) {
             console.log(err);
         }
