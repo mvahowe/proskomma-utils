@@ -36,7 +36,7 @@ const {
     items2aghast,
     string2aghast,
 
-} = require('../lib/aghast');
+} = require('./lib/aghast');
 
 module.exports = {
     addTag,
