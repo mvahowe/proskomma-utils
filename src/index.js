@@ -16,7 +16,14 @@ const {
 const ByteArray = require('./lib/byte_array');
 const {generateId} = require('./lib/generate_id');
 const {graftLocation} = require('./lib/graft_defs');
-const { itemEnum, itemEnumLabels } = require('./lib/item_defs');
+const {
+    itemEnum,
+    itemEnumLabels,
+    itemArray2Object,
+    itemObject2Array,
+    itemArrays2Objects,
+    itemObjects2Arrays,
+} = require('./lib/item_defs');
 const { scopeEnum, scopeEnumLabels, labelForScope, nComponentsForScope } = require("./lib/scope_defs");
 const {validateTags, validateTag, addTag, removeTag} = require('./lib/tags');
 const { tokenEnum, tokenEnumLabels, tokenCategory } = require('./lib/token_defs');
@@ -51,6 +58,10 @@ module.exports = {
     graftLocation,
     headerBytes,
     inspectEnum,
+    itemArray2Object,
+    itemArrays2Objects,
+    itemObject2Array,
+    itemObjects2Arrays,
     itemEnum,
     itemEnumLabels,
     items2aghast,

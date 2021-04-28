@@ -7,5 +7,27 @@ const itemEnum = {
 
 const itemEnumLabels = Object.entries(itemEnum).sort((a, b) => a[1] - b[1]).map(kv => kv[0]);
 
+const itemArray2Object = a => ({
+    type: a[0],
+    subType: a[1],
+    payload: a[2],
+});
 
-module.exports = { itemEnum, itemEnumLabels };
+const itemObject2Array = ob => [
+    ob.type,
+    ob.subType,
+    ob.payload,
+];
+
+const itemArrays2Objects = aa => aa.map(a => itemArray2Object(a));
+
+const itemObjects2Arrays = obs => obs.map(ob => itemObject2Array(ob));
+
+module.exports = {
+    itemEnum,
+    itemEnumLabels,
+    itemArray2Object,
+    itemObject2Array,
+    itemArrays2Objects,
+    itemObjects2Arrays,
+};

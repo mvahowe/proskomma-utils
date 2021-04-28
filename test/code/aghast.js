@@ -51,7 +51,6 @@ test(
             const agh = items2aghast(testItems);
             const aString = aghast2string(agh);
             t.ok(aString.length > 0);
-            console.log(aString);
         } catch (err) {
             console.log(err);
         }
