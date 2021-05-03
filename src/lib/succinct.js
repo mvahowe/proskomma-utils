@@ -81,7 +81,17 @@ const unpackEnum = (succinct, includeIndex) => {
     return ret;
 }
 
+const undefinedArgError = (func, field) => {
+  throw new Error(`Undefined or null argument '${field}' in '${func}'`);
+};
+
 const pushSuccinctTokenBytes = (bA, tokenEnumIndex, charsEnumIndex) => {
+    if (tokenEnumIndex === undefined || tokenEnumIndex === null) {
+        undefinedArgError('pushSuccinctTokenBytes', 'tokenEnumIndex');
+    }
+    if (charsEnumIndex === undefined || charsEnumIndex === null) {
+        undefinedArgError('pushSuccinctTokenBytes', 'charsEnumIndex');
+    }
     const lengthPos = bA.length;
     bA.pushByte(0);
     bA.pushByte(tokenEnumIndex);
@@ -90,6 +100,12 @@ const pushSuccinctTokenBytes = (bA, tokenEnumIndex, charsEnumIndex) => {
 }
 
 const pushSuccinctGraftBytes = (bA, graftTypeEnumIndex, seqEnumIndex) => {
+    if (graftTypeEnumIndex === undefined || graftTypeEnumIndex === null) {
+        undefinedArgError('pushSuccinctGraftBytes', 'graftTypeEnumIndex');
+    }
+    if (seqEnumIndex === undefined || seqEnumIndex === null) {
+        undefinedArgError('pushSuccinctGraftBytes', 'seqEnumIndex');
+    }
     const lengthPos = bA.length;
     bA.pushByte(0);
     bA.pushByte(graftTypeEnumIndex);
@@ -98,6 +114,15 @@ const pushSuccinctGraftBytes = (bA, graftTypeEnumIndex, seqEnumIndex) => {
 }
 
 const pushSuccinctScopeBytes = (bA, itemTypeByte, scopeTypeByte, scopeBitBytes) => {
+    if (itemTypeByte === undefined || itemTypeByte === null) {
+        undefinedArgError('pushSuccinctScopeBytes', 'itemTypeByte');
+    }
+    if (scopeTypeByte === undefined || scopeTypeByte === null) {
+        undefinedArgError('pushSuccinctScopeBytes', 'scopeTypeByte');
+    }
+    if (scopeBitBytes === undefined || scopeBitBytes === null) {
+        undefinedArgError('pushSuccinctScopeBytes', 'scopeBitBytes');
+    }
     const lengthPos = bA.length;
     bA.pushByte(0);
     bA.pushByte(scopeTypeByte);
