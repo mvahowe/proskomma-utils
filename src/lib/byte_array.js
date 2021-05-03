@@ -1,6 +1,12 @@
 const {utf8ByteArrayToString, stringToUtf8ByteArray} = require('utf8-string-bytes');
 const base64 = require("base64-js");
 
+const checkNum = (n, func, field) => {
+    if (typeof n !== 'number') {
+        throw new Error(`Argument ${field} of ${func} should be a number, not '${n}' (${typeof n})`);
+    }
+}
+
 class ByteArray {
 
     constructor(initialArraySize, initialLength) {
@@ -12,6 +18,7 @@ class ByteArray {
     }
 
     byte(n) {
+        checkNum(n, 'byte', 'n');
         if (n > this.length - 1) {
             throw Error(`Attempt to read byte ${n} of ByteArray of length ${this.length}`);
         }
@@ -19,6 +26,8 @@ class ByteArray {
     }
 
     bytes(n, l) {
+        checkNum(n, 'bytes', 'n');
+        checkNum(l, 'bytes', 'l');
         if ((n + l) > this.length) {
             throw Error(`Attempt to read ${l} bytes from start ${n} of ByteArray of length ${this.length}`);
         }
@@ -26,6 +35,8 @@ class ByteArray {
     }
 
     setByte(n, v) {
+        checkNum(n, 'setByte', 'n');
+        checkNum(v, 'setByte', 'v');
         if (n > this.length - 1) {
             throw Error(`Attempt to set byte ${n} of ByteArray of length ${this.length}`);
         }
@@ -36,6 +47,7 @@ class ByteArray {
     }
 
     setBytes(n, v) {
+        checkNum(n, 'setBytes', 'n');
         if ((n + v.length) > this.length) {
             throw Error(`Attempt to set ${v.length} bytes from start ${n} of ByteArray of length ${this.length}`);
         }
@@ -85,6 +97,7 @@ class ByteArray {
     }
 
     pushNByte(v) {
+        checkNum(v, 'pushNByte', 'v');
         // Low byte(s) first
         if (typeof (v) !== "number" || v < 0) {
             throw Error(`Expected positive number in pushNByte, found ${v}`);
@@ -109,6 +122,7 @@ class ByteArray {
     }
 
     nByte(n) {
+        checkNum(n, 'nByte', 'n');
         if (n > this.length - 1) {
             throw Error(`Attempt to read nByte ${n} of ByteArray of length ${this.length}`);
         }
@@ -121,6 +135,8 @@ class ByteArray {
     }
 
     nBytes(n, nValues) {
+        checkNum(n, 'nBytes', 'n');
+        checkNum(nValues, 'nBytes', 'nValues');
         const ret = [];
         while (nValues > 0) {
             let done = false;
@@ -148,6 +164,7 @@ class ByteArray {
     }
 
     nByteLength(v) {
+        checkNum(v, 'nByteLength', 'v');
         if (v >= 128 ** 4) {
             throw new Error("> 4 bytes found in nByteLength");
         }
@@ -166,6 +183,7 @@ class ByteArray {
     }
 
     countedString(n) {
+        checkNum(n, 'countedString', 'n');
         const sLength = this.byte(n);
         return utf8ByteArrayToString(this.bytes(n + 1, sLength));
     }
@@ -185,6 +203,7 @@ class ByteArray {
     }
 
     deleteItem(n) {
+        checkNum(n, 'deleteItem', 'n');
         const itemLength = this.byte(n) & 0x0000003F;
         this.length -= itemLength;
         if (this.length > n) {
@@ -194,6 +213,7 @@ class ByteArray {
     }
 
     insert(n, iba) {
+        checkNum(n, 'insert', 'n');
         const insertLength = iba.length;
         const newLength = this.length + insertLength;
         if (newLength >= (this.byteArray.length + insertLength)) {
