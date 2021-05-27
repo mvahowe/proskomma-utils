@@ -42,8 +42,8 @@ const {
     aghast2string,
     items2aghast,
     string2aghast,
-
 } = require('./lib/aghast');
+const parserConstants = require('./lib/parser_constant_defs');
 
 module.exports = {
     addTag,
@@ -68,6 +68,7 @@ module.exports = {
     labelForScope,
     mapVerse,
     nComponentsForScope,
+    parserConstants,
     preSuccinctVerseMapping,
     pushSuccinctTokenBytes,
     pushSuccinctGraftBytes,
