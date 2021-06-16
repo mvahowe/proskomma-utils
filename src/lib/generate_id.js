@@ -1,8 +1,12 @@
-const uuid = require('uuid');
-const uuidB64 = require('uuid-base64');
-
+let uuid;
+try {
+    uuid = require('react-native-uuid');
+} catch (err) {
+    uuid = require('uuid');
+}
+const btoa = require('btoa');
 const generateId = () =>  {
-    return uuidB64.encode(uuid.v4()).substring(0, 12);
+    return btoa(uuid.v4()).substring(0, 12);
 }
 
 module.exports = { generateId };
