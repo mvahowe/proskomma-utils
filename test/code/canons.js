@@ -8,7 +8,6 @@ test(
     async function (t) {
         try {
             t.plan(ptBookArray.length * 2);
-            console.log(ptBookArray);
             for (const ptBook of ptBookArray) {
                 t.ok(ptBook.code in ptBooks);
                 t.equal(ptBook.code, ptBooks[ptBook.code].code);
