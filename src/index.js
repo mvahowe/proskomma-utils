@@ -14,6 +14,7 @@ const {
     unpackEnum
 } = require('./lib/succinct');
 const ByteArray = require('./lib/byte_array');
+const { ptBooks, ptBookArray } = require('./lib/canons');
 const {generateId} = require('./lib/generate_id');
 const {graftLocation} = require('./lib/graft_defs');
 const {
@@ -69,6 +70,8 @@ module.exports = {
     mapVerse,
     nComponentsForScope,
     parserConstants,
+    ptBookArray,
+    ptBooks,
     preSuccinctVerseMapping,
     pushSuccinctTokenBytes,
     pushSuccinctGraftBytes,
