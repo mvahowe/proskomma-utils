@@ -18,7 +18,10 @@ const scopeEnum = {
     "spanWithAtts": 14,
     "attribute": 15,
     "hangingGraft": 16,
-    "orphanTokens": 17
+    "orphanTokens": 17,
+    "tTableCell": 18,
+    "tTableRow": 19,
+    "tTableCol": 20,
 };
 
 const scopeEnumLabels = Object.entries(scopeEnum).sort((a, b) => a[1] - b[1]).map(kv => kv[0]);
@@ -96,6 +99,12 @@ const labelForScope = (scopeType, scopeFields) => {
             return `altVerse/${scopeFields[0]}`;
         case "esbCat":
             return `esbCat/${scopeFields[0]}`;
+        case "tTableCell":
+            return `tTableCell/${scopeFields[0]}`;
+        case "tTableRow":
+            return `tTableRow/${scopeFields[0]}`;
+        case "tTableCol":
+            return `tTableCol/${scopeFields[0]}`;
         default:
             throw new Error(`Unknown scope type '${scopeType}' in labelForScope`);
     }
@@ -120,6 +129,9 @@ const nComponentsForScope = (scopeType) => {
         case "pubVerse":
         case "altVerse":
         case "esbCat":
+        case "tTableCell":
+        case "tTableRow":
+        case "tTableCol":
             return 2;
         case "cell":
             return 4;

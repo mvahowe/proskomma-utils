@@ -6,7 +6,8 @@ const graftLocation = {
     footnote: "inline",
     xref: "inline",
     noteCaller: "inline",
-    esbCat: "inline"
+    esbCat: "inline",
+    table: "block",
 };
 
 module.exports = { graftLocation };
