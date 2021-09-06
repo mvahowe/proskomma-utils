@@ -11,6 +11,7 @@ const parserConstants = {
             header: '*',
             remark: '*',
             sidebar: '*',
+            table: '*',
         },
         inlineSequenceTypes: {
             footnote: '*',
