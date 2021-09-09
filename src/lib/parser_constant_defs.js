@@ -12,6 +12,8 @@ const parserConstants = {
             remark: '*',
             sidebar: '*',
             table: '*',
+            tree: '*',
+            treeContent: '*',
         },
         inlineSequenceTypes: {
             footnote: '*',
