@@ -8,6 +8,8 @@ const graftLocation = {
     noteCaller: "inline",
     esbCat: "inline",
     table: "block",
+    tree: "block",
+    treeContent: "block",
 };
 
 module.exports = { graftLocation };
