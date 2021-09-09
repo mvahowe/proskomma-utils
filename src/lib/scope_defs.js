@@ -22,8 +22,9 @@ const scopeEnum = {
     "tTableRow": 18,
     "tTableCol": 19,
     "tTreeNode": 20,
-    "tTreeChild": 21,
-    "tTreeContent": 22,
+    "tTreeParent": 21,
+    "tTreeChild": 22,
+    "tTreeContent": 23,
 };
 
 const scopeEnumLabels = Object.entries(scopeEnum).sort((a, b) => a[1] - b[1]).map(kv => kv[0]);
@@ -105,12 +106,14 @@ const labelForScope = (scopeType, scopeFields) => {
             return `tTableRow/${scopeFields[0]}`;
         case "tTableCol":
             return `tTableCol/${scopeFields[0]}`;
-            case "tTreeNode":
-                return `tTreeNode/${scopeFields[0]}`;
-            case "tTreeChild":
-                return `tTreeChild/${scopeFields[0]}/${scopeFields[1]}`;
-            case "tTreeContent":
-                return `tTreeContent/${scopeFields[0]}/${scopeFields[1]}/${scopeFields[2]}/${scopeFields[3]}`;
+        case "tTreeNode":
+            return `tTreeNode/${scopeFields[0]}`;
+        case "tTreeParent":
+            return `tTreeParent/${scopeFields[0]}`;
+        case "tTreeChild":
+            return `tTreeChild/${scopeFields[0]}/${scopeFields[1]}`;
+        case "tTreeContent":
+            return `tTreeContent/${scopeFields[0]}/${scopeFields[1]}/${scopeFields[2]}/${scopeFields[3]}`;
         default:
             throw new Error(`Unknown scope type '${scopeType}' in labelForScope`);
     }
@@ -138,6 +141,7 @@ const nComponentsForScope = (scopeType) => {
         case "tTableRow":
         case "tTableCol":
         case "tTreeNode":
+        case "tTreeParent":
             return 2;
         case "tTreeChild":
             return 3;
@@ -152,4 +156,4 @@ const nComponentsForScope = (scopeType) => {
     }
 }
 
-module.exports = { scopeEnum, scopeEnumLabels, labelForScope, nComponentsForScope };
+module.exports = {scopeEnum, scopeEnumLabels, labelForScope, nComponentsForScope};
