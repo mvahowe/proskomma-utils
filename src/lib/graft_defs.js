@@ -9,7 +9,6 @@ const graftLocation = {
     esbCat: "inline",
     table: "block",
     tree: "block",
-    treeContent: "block",
 };
 
 module.exports = { graftLocation };

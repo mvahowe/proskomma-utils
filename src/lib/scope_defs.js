@@ -113,7 +113,7 @@ const labelForScope = (scopeType, scopeFields) => {
         case "tTreeChild":
             return `tTreeChild/${scopeFields[0]}/${scopeFields[1]}`;
         case "tTreeContent":
-            return `tTreeContent/${scopeFields[0]}/${scopeFields[1]}/${scopeFields[2]}/${scopeFields[3]}`;
+            return `tTreeContent/${scopeFields[0]}`;
         default:
             throw new Error(`Unknown scope type '${scopeType}' in labelForScope`);
     }
@@ -142,13 +142,12 @@ const nComponentsForScope = (scopeType) => {
         case "tTableCol":
         case "tTreeNode":
         case "tTreeParent":
+        case "tTreeContent":
             return 2;
         case "tTreeChild":
             return 3;
         case "cell":
             return 4;
-        case "tTreeContent":
-            return 5;
         case "attribute":
             return 6;
         default:
