@@ -13,6 +13,7 @@ const parserConstants = {
             sidebar: '*',
             table: '*',
             tree: '*',
+            kv: '*',
         },
         inlineSequenceTypes: {
             footnote: '*',

@@ -25,6 +25,9 @@ const scopeEnum = {
     "tTreeParent": 21,
     "tTreeChild": 22,
     "tTreeContent": 23,
+    "kvPrimary": 24,
+    "kvSecondary": 25,
+    "kvField": 26,
 };
 
 const scopeEnumLabels = Object.entries(scopeEnum).sort((a, b) => a[1] - b[1]).map(kv => kv[0]);
@@ -114,6 +117,12 @@ const labelForScope = (scopeType, scopeFields) => {
             return `tTreeChild/${scopeFields[0]}/${scopeFields[1]}`;
         case "tTreeContent":
             return `tTreeContent/${scopeFields[0]}`;
+        case "kvPrimary":
+            return `kvPrimary/${scopeFields[0]}`;
+        case "kvSecondary":
+            return `kvSecondary/${scopeFields[0]}/${scopeFields[1]}`;
+        case "kvField":
+            return `kvField/${scopeFields[0]}`;
         default:
             throw new Error(`Unknown scope type '${scopeType}' in labelForScope`);
     }
@@ -143,8 +152,11 @@ const nComponentsForScope = (scopeType) => {
         case "tTreeNode":
         case "tTreeParent":
         case "tTreeContent":
+        case "kvPrimary":
+        case "kvField":
             return 2;
         case "tTreeChild":
+        case "kvSecondary":
             return 3;
         case "cell":
             return 4;
