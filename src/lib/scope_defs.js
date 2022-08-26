@@ -1,4 +1,4 @@
-const xre = require('xregexp');
+import xre from 'xregexp';
 
 const scopeEnum = {
     "blockTag": 0,
@@ -167,4 +167,4 @@ const nComponentsForScope = (scopeType) => {
     }
 }
 
-module.exports = {scopeEnum, scopeEnumLabels, labelForScope, nComponentsForScope};
+export {scopeEnum, scopeEnumLabels, labelForScope, nComponentsForScope};

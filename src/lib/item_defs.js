@@ -23,7 +23,7 @@ const itemArrays2Objects = aa => aa.map(a => itemArray2Object(a));
 
 const itemObjects2Arrays = obs => obs.map(ob => itemObject2Array(ob));
 
-module.exports = {
+export {
     itemEnum,
     itemEnumLabels,
     itemArray2Object,

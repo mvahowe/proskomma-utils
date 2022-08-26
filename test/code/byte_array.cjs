@@ -1,5 +1,5 @@
 const test = require('tape');
-const ByteArray = require('../../src/lib/byte_array');
+const ByteArray = require('../../src/lib/byte_array').default;
 
 const testGroup = 'Byte Array';
 

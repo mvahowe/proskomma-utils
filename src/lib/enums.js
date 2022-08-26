@@ -1,4 +1,4 @@
-const xre = require('xregexp');
+import xre from 'xregexp';
 
 const enumStringIndex = (enumSuccinct, str) => {
     let pos = 0;
@@ -31,7 +31,7 @@ const enumRegexIndexTuples = (enumSuccinct, regex) => {
     return ret;
 }
 
-module.exports = {
+export {
     enumStringIndex,
     enumRegexIndexTuples,
 }

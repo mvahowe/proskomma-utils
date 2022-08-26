@@ -1,6 +1,6 @@
 const test = require('tape');
 
-const ByteArray = require('../../src/lib/byte_array');
+const ByteArray = require('../../src/lib/byte_array').default;
 const { pushSuccinctTokenBytes, pushSuccinctGraftBytes, pushSuccinctScopeBytes } = require('../../src/lib/succinct');
 
 const testGroup = 'Push Succinct';

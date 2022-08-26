@@ -1,6 +1,6 @@
-const serializedSchema = require('./schema/proskomma_serialized_0_2.json');
-const { inspectEnum } = require('./schema/inspect_succinct');
-const {
+import serializedSchema from './schema/proskomma_serialized_0_2.json';
+import { inspectEnum } from './schema/inspect_succinct';
+import {
     headerBytes,
     pushSuccinctTokenBytes,
     pushSuccinctGraftBytes,
@@ -12,24 +12,24 @@ const {
     enumIndexes,
     enumIndex,
     unpackEnum
-} = require('./lib/succinct');
-const ByteArray = require('./lib/byte_array');
-const { ptBooks, ptBookArray } = require('./lib/canons');
-const {generateId} = require('./lib/generate_id');
-const {graftLocation} = require('./lib/graft_defs');
-const {
+} from './lib/succinct';
+import ByteArray from './lib/byte_array';
+import { ptBooks, ptBookArray } from './lib/canons';
+import {generateId} from './lib/generate_id';
+import {graftLocation} from './lib/graft_defs';
+import {
     itemEnum,
     itemEnumLabels,
     itemArray2Object,
     itemObject2Array,
     itemArrays2Objects,
     itemObjects2Arrays,
-} = require('./lib/item_defs');
-const { scopeEnum, scopeEnumLabels, labelForScope, nComponentsForScope } = require("./lib/scope_defs");
-const {validateTags, validateTag, addTag, removeTag} = require('./lib/tags');
-const { tokenEnum, tokenEnumLabels, tokenCategory } = require('./lib/token_defs');
-const { enumStringIndex, enumRegexIndexTuples } = require('./lib/enums');
-const {
+} from './lib/item_defs';
+import { scopeEnum, scopeEnumLabels, labelForScope, nComponentsForScope } from "./lib/scope_defs";
+import {validateTags, validateTag, addTag, removeTag} from './lib/tags';
+import { tokenEnum, tokenEnumLabels, tokenCategory } from './lib/token_defs';
+import { enumStringIndex, enumRegexIndexTuples } from './lib/enums';
+import {
     vrs2json,
     reverseVersification,
     preSuccinctVerseMapping,
@@ -37,16 +37,16 @@ const {
     succinctifyVerseMappings,
     unsuccinctifyVerseMapping,
     mapVerse,
-} = require('./lib/versification');
-const {
+} from './lib/versification';
+import {
     aghast2items,
     aghast2string,
     items2aghast,
     string2aghast,
-} = require('./lib/aghast');
-const parserConstants = require('./lib/parser_constant_defs');
+} from './lib/aghast';
+import parserConstants from './lib/parser_constant_defs';
 
-module.exports = {
+export {
     addTag,
     aghast2items,
     aghast2string,

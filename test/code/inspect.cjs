@@ -1,7 +1,7 @@
 const test = require('tape');
 const fs = require('fs-extra');
 const path = require('path');
-const ByteArray = require("../../src/lib/byte_array");
+const ByteArray = require("../../src/lib/byte_array").default;
 const {unpackEnum} = require("../../src/lib/succinct");
 const {inspectEnum, inspectSuccinct} = require("../../src/schema/inspect_succinct");
 const {enumStringIndex, enumRegexIndexTuples} = require('../../src/lib/enums');

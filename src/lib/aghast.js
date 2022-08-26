@@ -1,4 +1,4 @@
-const xre = require('xregexp');
+import xre from 'xregexp';
 
 const printableRegexes = [
     ['wordLike', xre('([\\p{Letter}\\p{Number}\\p{Mark}\\u2060]{1,127})')],
@@ -289,7 +289,7 @@ const string2aghast = str => {
     return ret;
 };
 
-module.exports = {
+export {
     aghast2items,
     aghast2string,
     items2aghast,

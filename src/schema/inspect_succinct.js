@@ -1,8 +1,8 @@
-const ByteArray = require("../lib/byte_array");
-const { headerBytes, enumIndexes, succinctGraftName, succinctGraftSeqId, succinctScopeLabel, succinctTokenChars, unpackEnum } = require('../lib/succinct');
-const { itemEnumLabels } = require('../lib/item_defs');
-const { tokenEnumLabels } = require('../lib/token_defs');
-const { scopeEnumLabels } = require('../lib/scope_defs');
+import ByteArray from "../lib/byte_array";
+import { headerBytes, enumIndexes, succinctGraftName, succinctGraftSeqId, succinctScopeLabel, succinctTokenChars, unpackEnum } from '../lib/succinct';
+import { itemEnumLabels } from '../lib/item_defs';
+import { tokenEnumLabels } from '../lib/token_defs';
+import { scopeEnumLabels } from '../lib/scope_defs';
 
 const inspectEnum = enumString => {
     const ba = new ByteArray();
@@ -51,4 +51,4 @@ const inspectSuccinct = (succinct, enumStrings) => {
     return ret.join("\n");
 }
 
-module.exports = { inspectEnum, inspectSuccinct };
+export { inspectEnum, inspectSuccinct };

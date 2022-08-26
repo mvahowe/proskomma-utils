@@ -1,5 +1,5 @@
-const {utf8ByteArrayToString, stringToUtf8ByteArray} = require('utf8-string-bytes');
-const base64 = require("base64-js");
+import {utf8ByteArrayToString, stringToUtf8ByteArray} from 'utf8-string-bytes';
+import base64 from "base64-js";
 
 const checkNum = (n, func, field) => {
     if (typeof n !== 'number') {
@@ -7,7 +7,7 @@ const checkNum = (n, func, field) => {
     }
 }
 
-class ByteArray {
+export default class ByteArray {
 
     constructor(initialArraySize, initialLength) {
         initialArraySize = initialArraySize || 64;
@@ -228,5 +228,3 @@ class ByteArray {
     }
 
 }
-
-module.exports = ByteArray

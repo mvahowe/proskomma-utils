@@ -1,4 +1,4 @@
-const parserConstants = {
+export default {
     usfm: {
         baseSequenceTypes: {
             main: '1',
@@ -28,4 +28,3 @@ const parserConstants = {
     }
 }
 
-module.exports = parserConstants;

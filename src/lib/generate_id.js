@@ -1,7 +1,7 @@
-const uuid = require('uuid');
-const btoa = require('btoa');
+import { v4 } from 'uuid';
+import btoa from 'btoa';
 const generateId = () =>  {
-    return btoa(uuid.v4()).substring(0, 12);
+    return btoa(v4()).substring(0, 12);
 }
 
-module.exports = { generateId };
+export { generateId };

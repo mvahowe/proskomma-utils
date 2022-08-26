@@ -1,6 +1,6 @@
-const { tokenCategory, tokenEnumLabels } = require('./token_defs');
-const { scopeEnumLabels, nComponentsForScope } = require("./scope_defs");
-const { itemEnum } = require('./item_defs');
+import { tokenCategory, tokenEnumLabels } from './token_defs';
+import { scopeEnumLabels, nComponentsForScope } from "./scope_defs";
+import { itemEnum } from './item_defs';
 
 const headerBytes = (succinct, pos) =>{
     const headerByte = succinct.byte(pos);
@@ -133,7 +133,7 @@ const pushSuccinctScopeBytes = (bA, itemTypeByte, scopeTypeByte, scopeBitBytes) 
     bA.setByte(lengthPos, (bA.length - lengthPos) | itemTypeByte << 6);
 }
 
-module.exports = {
+export {
     enumIndex,
     enumIndexes,
     headerBytes,
