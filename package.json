@@ -22,15 +22,15 @@
   },
   "homepage": "https://github.com/mvahowe/proskomma-utils#readme",
   "dependencies": {
-    "@babel/core": "^7.12.9",
+    "@babel/core": "^7.19.0",
     "base64-js": "^1.5.1",
     "btoa": "^1.2.1",
     "deep-equal": "^2.0.5",
-    "jsonschema": "^1.4.0",
+    "jsonschema": "^1.4.1",
     "path": "^0.12.7",
     "pure-uuid": "^1.6.2",
     "utf8-string-bytes": "^1.0.3",
-    "xregexp": "^4.4.1"
+    "xregexp": "^5.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.10",
