@@ -6,6 +6,8 @@ module.exports = {
         'targets': {
           'esmodules': true,
         },
+        useBuiltIns: 'entry',
+        corejs: 3,
       },
     ],
   ],
